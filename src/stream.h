@@ -38,6 +38,11 @@ public:
     void set_closehandle(bool _close);
     bool get_closehandle();
 
+    int read(char *buffer, int _size);
+    int write(const char *buffer, int _size);
+
+    int listen(int backlog = 10);
+
 private:
     handle  handle_;
     bool    close_handle_;

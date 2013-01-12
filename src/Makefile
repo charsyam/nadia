@@ -25,7 +25,7 @@ QUIET_INSTALL = @printf '    %b %b\n' $(LINKCOLOR)INSTALL$(ENDCOLOR) $(BINCOLOR)
 endif
 
 TARGET= nadia
-NADIA_OBJ=nadia.o nadia_stream.o
+NADIA_OBJ=nadia.o stream.o epoll_dispatcher.o
 
 all: $(TARGET) 
 	@echo ""
