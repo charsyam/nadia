@@ -1,51 +1,11 @@
 #include    <stdio.h>
+#include    <string.h>
 #include    "stream.h"
 #include    "handler.h"
 #include    "dispatcher.h"
 #include    "epoll_dispatcher.h"
 #include    "acceptor.h"
-
-class EchoHandler : public nadia::handler {
-public:
-    EchoHandler(nadia::handle _handle) : stream_(_handle) {
-    };
-
-    int handle_close() {
-        return 0;
-    }
-
-    int handle_read() {
-        char buffer[4096];
-        int n = stream_.read(buffer, 4095);
-        buffer[n] = 0;
-        printf("recv: %s\n", buffer);
-
-        return 1;
-    }
-
-    int handle_write() {
-        return 1;
-    }
-
-    int handle_error() {
-        return 0;
-    }
-
-    int handle_timeout() {
-        return 0;
-    }
-
-    int handle_signal(int _sig) {
-        return 0;
-    }
-
-    nadia::handle get_handle() {
-        return stream_.get_handle();
-    }
-
-private:
-    nadia::stream stream_;
-};
+#include    "echo_handler.h"
 
 int main( int argc, char *argv[] )
 {
@@ -65,8 +25,8 @@ int main( int argc, char *argv[] )
         return -1;
     }
 
-    nadia::dispatcher<nadia::epoll_dispatcher> poller; 
-    nadia::acceptor<nadia::epoll_dispatcher, EchoHandler> acceptor_(s.get_handle(), &poller);
+    nadia::epoll_dispatcher poller; 
+    nadia::acceptor<EchoHandler> acceptor_(s.get_handle(), &poller);
     poller.register_handler(&acceptor_, nadia::READ_EVENT);
     for(;;) {
         poller.handle_events();

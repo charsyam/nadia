@@ -1,4 +1,5 @@
 #include    "epoll_dispatcher.h"
+#include    <stdio.h>
 
 namespace nadia {
 
@@ -15,7 +16,7 @@ epoll_dispatcher::~epoll_dispatcher() {
 }
 
 void set_event_type(struct epoll_event &_event, handler *_h, event_type _et) {
-    int status = EPOLLET;
+    int status = 0;
     if (_et & READ_EVENT) {
         status |= EPOLLIN;
     }
@@ -107,8 +108,9 @@ int epoll_dispatcher::handles(struct epoll_event &_event) {
 }
 
 int epoll_dispatcher::handle_events() {
-    int timeout = 0;
+    int timeout = -1;
     int n = epoll_wait(ep_, events_, max_events_, timeout);
+    printf("handle_events: (%d)\n", n);
     if (n > 0) {
         for (int i = 0; i < n; i++) {
             handles(events_[i]);

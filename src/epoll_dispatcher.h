@@ -1,6 +1,8 @@
 #pragma once
 
 #include    "handler.h"
+#include    "dispatcher.h"
+
 #include    <sys/epoll.h>
 #include    <errno.h>
 #include    <unistd.h>
@@ -11,7 +13,7 @@ namespace nadia {
 typedef     handle      TIMER_ID;
 typedef     handle      SIGNAL_ID;
 
-class epoll_dispatcher {
+class epoll_dispatcher : public dispatcher {
 public:
     epoll_dispatcher();
     ~epoll_dispatcher();

@@ -7,6 +7,7 @@ namespace nadia {
 enum event_type{
     READ_EVENT = 01,
     WRITE_EVENT = 02,
+    READWRITE_EVENT = 03,
     TIMEOUT_EVENT = 04,
     SIGNAL_EVENT = 010,
     CLOSE_EVENT = 020

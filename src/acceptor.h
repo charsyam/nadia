@@ -2,14 +2,19 @@
 
 #include "handler.h"
 #include "stream.h"
-#include "epoll_dispatcher.h"
+#include "dispatcher.h"
 
 namespace nadia {
 
-template<typename POLLER, typename HANDLER>
+template<typename HANDLER>
 class acceptor : public handler {
 public:
-    acceptor(handle _handle, dispatcher<POLLER> *_dispatcher) : dispatcher_(_dispatcher), stream_(_handle) {}
+    acceptor(handle _handle, dispatcher *_dispatcher) : dispatcher_(_dispatcher), stream_(_handle) {
+        int yes = 1;
+        if (setsockopt(stream_.get_handle(), SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1) {
+            
+        }
+    }
     ~acceptor(){}
     int handle_close() {
         return 0;
@@ -18,7 +23,7 @@ public:
     int handle_read() {
         handle new_handle = ::accept(stream_.get_handle(), NULL, NULL);
         if (new_handle > 0) {
-            dispatcher_->register_handler(new HANDLER(new_handle), READ_EVENT);
+            dispatcher_->register_handler(new HANDLER(new_handle, dispatcher_), READ_EVENT);
         }
 
         return new_handle;
@@ -46,7 +51,7 @@ public:
 
 private:
     stream  stream_;
-    dispatcher<POLLER> *dispatcher_;    
+    dispatcher *dispatcher_;    
 };
 
 }
