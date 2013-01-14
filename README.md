@@ -1,23 +1,25 @@
 - Nadia Packet
 * Nadia Packet is similar to Redis( Multi Bulk Format )
+* Nadia doesn't support inline command
+
+- Need Information.
+* VectorClock( NodeId, version, timestamp )
+
+Reqeust Packet
 
 ```c
 #set command
-*3
-$3
-set
-$4
-test
-$3
-abc
+
 
 #get command
-*2
-$3
-get
-$4
-test
+
+
 ```
 
+Response Packet
 
+```
+#get command
+
+```
 
